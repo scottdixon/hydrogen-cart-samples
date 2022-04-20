@@ -2,6 +2,7 @@ import {
   useCart,
   CartCheckoutButton,
   Link,
+  Money,
   CartLines,
   CartLineImage,
   CartLineProductTitle,
@@ -16,6 +17,7 @@ import {Dialog} from '@headlessui/react';
 
 import {useCartUI} from './CartUIProvider.client';
 import CartIconWithItems from './CartIconWithItems.client';
+import {useState} from 'react';
 
 /**
  * A client component that contains the merchandise that a customer intends to purchase, and the estimated cost associated with the cart
@@ -191,10 +193,40 @@ function CartItemQuantity() {
 }
 
 function CartFooter() {
+  const {discountCodesUpdate, estimatedCost, discountCodes} = useCart();
+  const [showDiscountForm, setShowDiscountForm] = useState(false);
+  const [discountCode, setDiscountCode] = useState('');
+
+  const addDiscountCode = () => {
+    setShowDiscountForm(true);
+  };
+  const applyDiscountCode = (e) => {
+    e.preventDefault();
+    discountCodesUpdate(discountCode);
+  };
   return (
     <footer className="bottom-0 sticky pb-8 border-t border-black border-opacity-5">
       <div className="relative h-60 bg-white text-gray-900 p-7">
         <div role="table" aria-label="Cost summary">
+          {showDiscountForm ? (
+            <form className="mb-2" onSubmit={applyDiscountCode}>
+              <input
+                type="text"
+                className="border"
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value)}
+              />
+              <button type="submit">Apply</button>
+            </form>
+          ) : (
+            <a
+              onClick={addDiscountCode}
+              className="text-sm pb-2 underline cursor-pointer"
+            >
+              Add a discount code
+            </a>
+          )}
+
           <div role="row" className="flex justify-between">
             <span className="font-semibold" role="rowheader">
               Subtotal
@@ -212,6 +244,12 @@ function CartFooter() {
             <span role="cell" className="uppercase">
               Free
             </span>
+          </div>
+          <div role="row" className="flex justify-between">
+            <span className="font-semibold" role="rowheader">
+              Total
+            </span>
+            <Money data={estimatedCost.totalAmount} />
           </div>
         </div>
         <CartShopPayButton className="flex my-4 justify-center w-full bg-[#5a31f4] py-2 rounded-md" />
