@@ -5,15 +5,18 @@ import shopifyConfig from '../shopify.config';
 
 import NotFound from './components/NotFound.server';
 import Loading from './components/Loading';
+import CartProvider from './components/CartProvider.client';
 
 function App({routes}) {
   return (
     <Suspense fallback={<Loading />}>
       <ShopifyProvider shopifyConfig={shopifyConfig}>
-        <Router>
-          <FileRoutes routes={routes} />
-          <Route path="*" page={<NotFound />} />
-        </Router>
+        <CartProvider>
+          <Router>
+            <FileRoutes routes={routes} />
+            <Route path="*" page={<NotFound />} />
+          </Router>
+        </CartProvider>
       </ShopifyProvider>
     </Suspense>
   );

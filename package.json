@@ -5,6 +5,7 @@
     "lint": "eslint --no-error-on-unmatched-pattern --ext .js,.ts,.jsx,.tsx src && stylelint ./src/**/*.{css,sass,scss}"
   },
   "dependencies": {
+    "@headlessui/react": "^1.5.0",
     "@shopify/hydrogen": "^0.16.0",
     "@shopify/hydrogen-cli": "^0.9.1",
     "@tailwindcss/typography": "^0.5.2",
